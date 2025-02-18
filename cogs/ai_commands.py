@@ -2,9 +2,7 @@ from http.client import responses
 import disnake
 from disnake.ext import commands
 import openai
-from main import OPENAI_TOKEN
 
-openai.api_key = OPENAI_TOKEN
 
 class AICommands(commands.Cog):
     def __init__(self, bot):
@@ -13,12 +11,12 @@ class AICommands(commands.Cog):
     @commands.command()
     async def ask(self, ctx, *, question: str):
         try:
-            response = openai.Completion.create(
-                engine='text-davinci-003',
+            response = openai.completions.create(
+                model="gpt-3.5-turbo",  # Можно использовать и другие модели, например, gpt-4
                 prompt=question,
                 max_tokens=150
             )
-            answer = response.choices[0].text.strip()
+            answer = response['choices'][0]['text'].strip()
 
             await ctx.send(answer)
 
